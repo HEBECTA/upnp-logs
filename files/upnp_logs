@@ -1,0 +1,33 @@
+#!/bin/sh
+
+FILE=/log/upnp_denied_addr
+
+sql=sqlite3
+
+if ! command -v "$sql" &> /dev/null
+then
+        echo "$sql could not be found"
+fi
+
+
+
+if [ -f "$FILE" ]; then
+
+        if [ -z "$1" ]; then
+
+"$sql" "$FILE" <<EOF
+SELECT * FROM DENIED_ACCESS_ADDRS;
+EOF
+        else
+
+"$sql" "$FILE" <<EOF
+SELECT * FROM DENIED_ACCESS_ADDRS WHERE Eport = "$1";
+EOF
+
+        fi
+
+else
+
+        echo "File not found !"
+
+fi
